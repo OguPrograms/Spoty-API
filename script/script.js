@@ -1,18 +1,26 @@
 import { clientId, clientSecret } from "../env/client.js";
 
 let tokenAccess = null;
+let isClean = true;
 
 /**** LISTENERS ****/
 
 // Searche button
 searchButton.addEventListener('click', function() {
+
     if (searchInput.value === "") {
         alert("Has d'introduir una cançó per poder buscar");
     } else if (searchInput.value.length <= 2) {
         alert("Has d'introduir més de 2 lletres per poder buscar");
     } else if (tokenAccess) {
+        // In case user sarche for second time, I clearn the tracks
+        if (!isClean) {
+            document.getElementById("tracks-container").innerHTML = "";
+            isClean = true;
+        } 
         search();
     }
+
 });
 
 // On press enter
@@ -24,6 +32,10 @@ searchInput.addEventListener('keydown', function(event) {
         } else if (searchInput.value.length <= 2) {
             alert("Has d'introduir més de 2 lletres per poder buscar");
         } else if (tokenAccess) {
+            if (!isClean) {
+                document.getElementById("tracks-container").innerHTML = "";
+                isClean = true;
+            } 
             search();
         }
 
@@ -121,6 +133,8 @@ const searchSpotifyTracks = function (query, accessToken) {
 function renderTracks (tracks) {
     const tracksContainer = document.getElementById("tracks-container");
 
+    isClean = false;
+
     for (let i = 0; i < tracks.length; i++) {
         const track = document.createElement("div");
         track.classList.add("track");
@@ -131,12 +145,68 @@ function renderTracks (tracks) {
                             <h3>Artista:</h3>
                             <h2>${tracks[i].artists[0].name}</h2>`;
         tracksContainer.appendChild(track);
+
+        track.addEventListener('click', function() {
+            tracksButton(tracks[i].artists[0].id);
+        })
     }
+}
+
+/**** SEARCH ARTIST ****/
+function tracksButton(artist) {
+    const artistUrl = `https://api.spotify.com/v1/artists/${artist}`;
+
+    const header = {
+        Authorization: `Bearer ${tokenAccess}`,
+    };
+
+    fetch(artistUrl, {
+        method: "GET",
+        headers: header,
+    })
+
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+    })
+
+    .then((data) => {
+        renderArtist(data);
+    })
+
+    .catch((error) => {
+        console.error("Error al mostrar l'artista:", error);
+    });
+
+}
+
+/**** RENDER ARTIST ****/
+function renderArtist (artist) {
+    console.log(artist);
+    const artistContainer = document.getElementById("artist-container");
+
+        artistContainer.classList.add("artist");
+        artistContainer.innerHTML = `<img class="artist__image" src="${artist.images[0].url}" alt="Artis porfile"/>
+                            <h1>${artist.name}</h1>
+                            <h3>Popularidad:</h3>
+                            <h2>${artist.popularity}%</h2>
+                            <h3>Generes:</h3>
+                            <h2>${artist.genres.join(', ')}</h2>
+                            <h3>Seguidors:</h3>
+                            <h2>${artist.followers.total}</h2>`;
+        artistContainer.appendChild(track);
+
 }
 
 /**** CLEAR INPUT ****/
 function clear() {
-    searchInput.value = ''; 
+    const tracksContainer = document.getElementById("tracks-container");
+    tracksContainer.innerHTML = "";
+
+    searchInput.value = '';
+    isClean = true;
 }
 
 
