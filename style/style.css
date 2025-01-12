@@ -71,17 +71,26 @@ body{
         overflow-x: hidden;
         overflow-y: auto;
 
-        width: calc(60vw - 40px);
-
         display: grid;
         --column: calc(calc(100% - 65px) / 3);
         grid-template-columns: var(--column) var(--column) var(--column);
 
         color: var(--white);
 
-        /* padding: 20px; */
-        margin-right: 10px;
+        padding: 5;
         gap: 20px;
+
+        .search-message{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            grid-column: 1 / 4;
+
+            font-size: 18px;
+            color: (--white-gray);
+            opacity: 0.2;
+        }
 
         .track{
             width: 100%;
@@ -156,6 +165,29 @@ body{
             margin-top: 8px;
             margin-bottom: 0px;
             color: var(--white-gray);
+        }
+
+        .artistBestSongs{
+            background-color: var(--color-gray-light);
+            padding: 20px;
+            border-radius: var(--borders);
+
+            .songWrapper{
+                display: flex;
+                align-items: flex-end;
+                gap: 10px;
+            }
+
+            h3{
+                margin-top: 0px;
+                margin-bottom: 10px;
+            }
+
+            h2{
+                margin-block: 5px;
+                font-size: 15px;
+            }
+
         }
 
     }
