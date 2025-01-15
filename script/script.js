@@ -130,6 +130,14 @@ function renderTracks (tracks) {
     const tracksContainer = document.getElementById("tracks-container");
 
     for (let i = 0; i < tracks.length; i++) {
+
+        let addButtonText = "+ Afegir"
+        let savedSongs = JSON.parse(localStorage.getItem("savedSongs")) || [];
+
+        if (savedSongs.includes(tracks[i].id)) {
+            addButtonText = "A la llista"
+        }
+
         const track = document.createElement("div");
         track.classList.add("track");
         track.innerHTML = `<img class="track__image" src="${tracks[i].album.images[0].url}" alt="Album cover"/>
@@ -137,12 +145,49 @@ function renderTracks (tracks) {
                             <h3>Album:</h3>
                             <h2>${tracks[i].album.name}</h2>
                             <h3>Artista:</h3>
-                            <h2>${tracks[i].artists[0].name}</h2>`;
+                            <h2>${tracks[i].artists[0].name}</h2>
+                            <div class="addButton" id="addButton">
+                                ${addButtonText}
+                            </div>`;
         tracksContainer.appendChild(track);
 
         track.addEventListener('click', function() {
             tracksButton(tracks[i].artists[0].id);
         })
+
+        const addButton = track.querySelector(`#addButton`);
+        addButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Fa que no es cliquei sobre el pare, que també és clicable
+
+            const buttonText = track.querySelector('.addButton');
+
+            if (savedSongs.includes(tracks[i].id)) {
+
+                savedSongs = savedSongs.filter(songId => songId !== tracks[i].id);
+
+                localStorage.setItem("savedSongs", JSON.stringify(savedSongs));
+
+                buttonText.innerHTML = "+ Afegir";
+
+            } else {
+
+                savedSongs.push(tracks[i].id);
+
+                localStorage.setItem("savedSongs", JSON.stringify(savedSongs));
+
+                buttonText.innerHTML = "A la llista";
+
+                // Pintar missatge d'afegit
+                document.getElementById("addedMessage").style.opacity = "1";
+                setTimeout(function() {
+                    document.getElementById("addedMessage").style.opacity = "0";
+                }, 2500);
+
+            }
+
+            console.log(savedSongs);
+
+        });
     }
 }
 
@@ -212,7 +257,6 @@ function searchArtistBestSongs(artist) {
 // RENDER ARTIST
 function renderArtist (artist, bestSongs) {
 
-    console.log(bestSongs);
     const artistContainer = document.getElementById("artist-container");
     artistContainer.innerHTML = "";
 

@@ -7,6 +7,7 @@ body{
     --color-gray-light: #2b2b2b;
     --white-gray: #b3b3b3;
     --white: #ffffff;
+    --green: #1ED760;
 
     --borders: 8px;
 
@@ -16,6 +17,8 @@ body{
     grid-template-rows: 39px auto;
     grid-template-columns: 30% 30% calc(40% - 40px);
     gap: 20px;
+
+    position: relative;
 
     .search-container{
         grid-column: 1 / 4;
@@ -96,9 +99,11 @@ body{
             width: 100%;
 
             padding: 10px;
+            padding-bottom: 40px;
             border-radius: var(--borders);
 
             font-family: sans-serif;
+            position: relative;
 
             img{
                 aspect-ratio: 1 / 1;
@@ -123,6 +128,29 @@ body{
                 margin-bottom: 0px;
                 font-size: 8px;
                 color: var(--white-gray);
+            }
+
+            .addButton{
+                border: 1px solid var(--white-gray);
+                background-color: var(--color-gray-light);
+                border-radius: 200px;
+
+                position: absolute;
+                bottom: 10px;
+
+                padding: 5px;
+                width: calc(100% - 31px);
+
+                display: flex;
+                justify-content: center;
+
+                font-size: 12px;
+            }
+
+            .addButton:hover{
+                background-color: var(--green);
+                color: var(--color-greay);
+                border-color: var(--green);
             }
 
         }
@@ -173,9 +201,15 @@ body{
             border-radius: var(--borders);
 
             .songWrapper{
+
                 display: flex;
-                align-items: flex-end;
                 gap: 10px;
+
+                h3{
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 8px;
+                }
             }
 
             h3{
@@ -196,6 +230,30 @@ body{
         background-color: var(--color-greay);
 
         border-radius: var(--borders);
+
+    }
+
+    .addedMessage{
+
+        --message-width: 200px;
+
+        position: absolute;
+        left: calc(50% - var(--message-width) / 2);
+        bottom: 80px;
+
+        background-color: var(--green);
+        color: var(--color-greay);
+
+        width: var(--message-width);
+        padding: 10px;
+
+        border-radius: 200px;
+
+        display: flex;
+        justify-content: center;
+
+        transition: opacity 1s ease-in-out;
+        opacity: 0;
 
     }
 
