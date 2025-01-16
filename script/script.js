@@ -2,6 +2,7 @@ import { clientId, clientSecret } from "../env/client.js";
 
 let tokenAccess = null;
 let searchMessage = "<div class='search-message'>CERCA UNA CANÇÓ</div>";
+let numTracks = 0
 
 /**** LISTENERS ****/
 
@@ -15,7 +16,8 @@ searchButton.addEventListener('click', function() {
     } else if (tokenAccess) {
         // In case user sarche for second time, I clearn the tracks
         document.getElementById("tracks-container").innerHTML = "";
-        search();
+        numTracks = 12
+        search(0);
     }
 
 });
@@ -31,7 +33,8 @@ searchInput.addEventListener('keydown', function(event) {
         } else if (tokenAccess) {
 
             document.getElementById("tracks-container").innerHTML = "";
-            search();
+            numTracks = 12
+            search(0);
 
         }
 
@@ -84,21 +87,22 @@ const getSpotifyAccessToken = function (clientId, clientSecret) {
 
 
 /**** SEARCH ****/
-function search() {
-    const input = document.getElementById("searchInput").value;
+function search(offset) {
+    const query = document.getElementById("searchInput").value;
     document.getElementById("deleteButton").disabled = false;
 
-    searchSpotifyTracks(input, tokenAccess);
+    let searchUrl =
+    `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+        query
+    )}&type=track&limit=12`;
+
+    searchSpotifyTracks(searchUrl, tokenAccess);
 }
 
-const searchSpotifyTracks = function (query, accessToken) {
+const searchSpotifyTracks = function (searchUrl, accessToken) {
     // Definim l’endpoint, la query és el valor de búsqueda.
     // Limitem la búsqueda a cançons i retornarà 12 resultats.
-    const searchUrl =
-        `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-            query
-        )}&type=track&limit=12`;
-
+    
     // Al headers sempre s’ha de posar la mateixa informació.
     fetch(searchUrl, {
         method: "GET",
@@ -117,7 +121,7 @@ const searchSpotifyTracks = function (query, accessToken) {
     .then((data) => {
         // Data retorna tota la informació de la consulta de l’API 
 
-        renderTracks(data.tracks.items);
+        renderTracks(data);
 
     })
     .catch((error) => {
@@ -126,7 +130,9 @@ const searchSpotifyTracks = function (query, accessToken) {
 };
 
 // RENDER TRACKS
-function renderTracks (tracks) {
+function renderTracks (data) {
+    let tracks = data.tracks.items;
+    let info = data.tracks;
     const tracksContainer = document.getElementById("tracks-container");
 
     for (let i = 0; i < tracks.length; i++) {
@@ -189,6 +195,21 @@ function renderTracks (tracks) {
 
         });
     }
+
+    const loadSongs = document.createElement("button");
+    loadSongs.classList.add("loadMoreSong");
+    loadSongs.innerHTML = ` <h4>Carrega més cançons</h3>
+                            <p>${(info.offset+info.limit)} de ${info.total}</p>`;
+    tracksContainer.appendChild(loadSongs);
+
+    console.log("offs"+info.offset)
+    console.log("lim"+info.limit)
+
+    loadSongs.addEventListener('click', function() {
+        searchSpotifyTracks(info.next, tokenAccess);
+        loadSongs.remove();
+    })
+
 }
 
 /**** SEARCH ARTIST ****/

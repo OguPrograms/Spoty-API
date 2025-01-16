@@ -132,7 +132,7 @@ body{
 
             .addButton{
                 border: 1px solid var(--white-gray);
-                background-color: var(--color-gray-light);
+                /* background-color: var(--color-gray-light); */
                 border-radius: 200px;
 
                 position: absolute;
@@ -159,8 +159,43 @@ body{
             cursor: pointer;
             background-color: var(--color-gray-light);
         }
+
+        .loadMoreSong{
+            grid-column: 1 / 4;
+
+            border: 1px solid var(--white-gray);
+            border-radius: 200px;
+            background-color: var(--color-greay);
+
+            padding-block: 5px;
+            padding-inline: 20px;
+            margin-bottom: 15px;
+            margin-left: 21px;
+            width: auto;
+
+            justify-self: center;
+
+            cursor: pointer;
+            color: var(--white);
+
+            h4{
+                margin: 0;
+                font-size: 14px;
+            }
+
+            p{
+                margin: 0;
+                font-size: 12px;
+            }
+        }
+
+        .loadMoreSong:hover{
+            background-color: var(--green);
+            color: var(--color-greay);
+            border-color: var(--green);
+        }
     }
-    
+
     .artist-container{
         background-color: var(--color-greay);
         grid-column: 3 / 4; 
@@ -270,6 +305,12 @@ body{
 }
 
 ::-webkit-scrollbar-thumb {
+    cursor: pointer;
     background: var(--color-gray-light);
     border-radius: 10px;
 }
+
+/* .search__bar:-webkit-autofill {
+    box-shadow: 0 0 0 1000px var(--color-greay) inset !important;
+    color: var(--white) !important;
+} */
