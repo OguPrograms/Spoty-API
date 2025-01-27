@@ -20,10 +20,10 @@ body{
 
     position: relative;
 
-    .search-container{
+    .header-container{
         grid-column: 1 / 4;
 
-        .search__buttons, .search__bar{
+        .buttons, .search__bar{
             cursor: all;
             all: unset;
 
@@ -50,12 +50,12 @@ body{
             padding: 9px 19.3px;
         }
 
-        .search__buttons{
+        .buttons{
             margin-inline: 5px;
             color: var(--white-gray); 
         }
         
-        .search__buttons:hover{
+        .buttons:hover{
             color: var(--white);
             cursor: pointer;
         }

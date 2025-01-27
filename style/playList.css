@@ -1,0 +1,60 @@
+body{
+    font-family: 'Montserrat', Arial;
+    background-color: #000;
+
+    --color-greay-black: #121212;
+    --color-greay: #1f1f1f;
+    --color-gray-light: #2b2b2b;
+    --white-gray: #b3b3b3;
+    --white: #ffffff;
+    --green: #1ED760;
+
+    --borders: 8px;
+
+    margin: 20px;
+
+    .button{
+        cursor: all;
+        all: unset;
+
+        border-radius: 200px;
+        background-color: var(--color-greay);
+        padding: 10px 20px;
+
+        transition: color 0.3s ease-in-out;
+    }
+
+    .button{
+        margin-inline: 5px;
+        color: var(--white-gray); 
+    }
+
+    .button:hover{
+        color: var(--white);
+        cursor: pointer;
+    }
+
+    .playlist-body{
+
+        display: flex;
+        flex-direction: row;
+
+        height: 100%;
+
+        margin-top: 20px;
+        gap: 20px;
+
+        .container{
+            background-color: var(--color-greay);
+            border-radius: var(--borders);
+
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            color: var(--white);
+
+            padding: 5;
+            gap: 20px;
+        }
+    }
+}

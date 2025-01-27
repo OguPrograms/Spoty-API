@@ -2,7 +2,7 @@ import { clientId, clientSecret } from "../env/client.js";
 
 let tokenAccess = null;
 let searchMessage = "<div class='search-message'>CERCA UNA CANÇÓ</div>";
-let numTracks = 0
+let numTracks = 12;
 
 /**** LISTENERS ****/
 
@@ -48,6 +48,11 @@ deleteButton.addEventListener('click', function() {
     }
 });
 
+// PlayList button
+playlistButton.addEventListener('click', function() {
+    autoritzar();
+});
+
 /**** API CONECTION ****/
 const getSpotifyAccessToken = function (clientId, clientSecret) {
     // Url de l'endpont de spotify
@@ -77,6 +82,7 @@ const getSpotifyAccessToken = function (clientId, clientSecret) {
         // Al data retorna el token d'accés que necessitarem
         tokenAccess = data.access_token;
         document.getElementById("searchButton").disabled = false;
+        document.getElementById("playlistButton").disabled = false;
         // Haurem d’habilitar els botons “Buscar” i “Borrar”
     })
     .catch((error) => {
@@ -202,9 +208,6 @@ function renderTracks (data) {
                             <p>${(info.offset+info.limit)} de ${info.total}</p>`;
     tracksContainer.appendChild(loadSongs);
 
-    console.log("offs"+info.offset)
-    console.log("lim"+info.limit)
-
     loadSongs.addEventListener('click', function() {
         searchSpotifyTracks(info.next, tokenAccess);
         loadSongs.remove();
@@ -319,5 +322,24 @@ function clear() {
 
 }
 
-
 getSpotifyAccessToken(clientId, clientSecret);
+
+
+/******************************************************/
+/********************** PLAYLIST **********************/
+/******************************************************/
+
+const URL = "https://accounts.spotify.com/authorize";
+const redirectUri = "http://127.0.0.1:5500/playList.html";
+const scopes = "playlist-modify-private user-library-modify playlist-modify-public";
+
+const autoritzar = function () {
+
+    const authUrl = URL +
+                    `?client_id=${clientId}` +
+                    `&response_type=token` +
+                    `&redirect_uri=${redirectUri}` +
+                    `&scope=${scopes}`;
+    window.location.assign(authUrl);
+
+};

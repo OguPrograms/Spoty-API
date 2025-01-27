@@ -2,14 +2,15 @@
     <head>
         <meta charset="utf-8" />
         <title>Spoty-API</title>
-        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet" href="style/home.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="search-container">
+        <div class="header-container">
             <input type="text" class="search__bar" id="searchInput" placeholder="Canço">
-            <button class="search__buttons" id="searchButton" disabled>Cercar</button>
-            <button class="search__buttons" id="deleteButton" disabled>Borrar</button>
+            <button class="buttons" id="searchButton" disabled>Cercar</button>
+            <button class="buttons" id="deleteButton" disabled>Borrar</button>
+            <button class="buttons" id="playlistButton" disabled>PlayList</button>
         </div>
         <div id="tracks-container" class="tracks-container">
             <div class='search-message'>CERCA UNA CANÇÓ</div>
@@ -18,6 +19,6 @@
 
         </div>
         <div class="addedMessage" id="addedMessage">Cançó afegida a la llista</div>
-        <script type="module" src="script/script.js"></script>
+        <script type="module" src="script/home.js"></script>
     </body>
 </html>
