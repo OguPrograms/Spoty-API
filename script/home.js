@@ -54,7 +54,7 @@ playlistButton.addEventListener('click', function() {
 });
 
 /**** API CONECTION ****/
-const getSpotifyAccessToken = function (clientId, clientSecret) {
+function getSpotifyAccessToken(clientId, clientSecret) {
     // Url de l'endpont de spotify
     const url = "https://accounts.spotify.com/api/token";
     // ClientId i ClienSecret generat en la plataforma de spotify
@@ -105,7 +105,7 @@ function search(offset) {
     searchSpotifyTracks(searchUrl, tokenAccess);
 }
 
-const searchSpotifyTracks = function (searchUrl, accessToken) {
+function searchSpotifyTracks(searchUrl, accessToken) {
     // Definim l’endpoint, la query és el valor de búsqueda.
     // Limitem la búsqueda a cançons i retornarà 12 resultats.
     
@@ -333,7 +333,7 @@ const URL = "https://accounts.spotify.com/authorize";
 const redirectUri = "http://127.0.0.1:5500/playList.html";
 const scopes = "playlist-modify-private user-library-modify playlist-modify-public";
 
-const autoritzar = function () {
+function autoritzar() {
 
     const authUrl = URL +
                     `?client_id=${clientId}` +
