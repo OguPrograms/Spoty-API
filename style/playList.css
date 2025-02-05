@@ -100,7 +100,8 @@ body{
         .playlist-container {
 
             position: relative;
-            min-width: 30%;
+            width: 30%;
+            max-width: 30%;
             padding: 10px;
 
             overflow-x: hidden;
@@ -114,6 +115,12 @@ body{
 
                 padding: 10px;
                 gap: 20px;
+
+            }
+
+            .playlistSelected h2 {
+                padding: 9.5px;
+                border: 1px solid var(--white);
             }
 
             h2:hover{
@@ -169,7 +176,7 @@ body{
         .songs-container{
 
             position: relative;
-            width: 39%;
+            width: 40%;
             padding: 10px;
             gap: 10px;
 
@@ -221,7 +228,7 @@ body{
 
         .selected-container{
 
-            width: 30%;
+            width: 40%;
 
             display: flex;
             flex-direction: column;

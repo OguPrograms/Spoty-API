@@ -187,6 +187,8 @@ function displayPlaylist(playlist) {
     listContainer.appendChild(playlist_item);
 
     playlist_item.addEventListener('click', function() {
+        document.querySelectorAll('.playlistSelected').forEach(item => item.classList.remove('playlistSelected'));
+        playlist_item.classList.add('playlistSelected');
         getTrcksPlaylist(playlist.id);
     });
 };
@@ -206,8 +208,28 @@ function displaySavedSongs(savedSongs) {
                                     </div>`;
         selectedContainer.appendChild(savedSong_item);
 
-        savedSong_item.addEventListener('click', function() {
-            getTrcksPlaylist(playlist.id);
+        let addButton = savedSong_item.querySelector("#addButton");
+        let removeButton = savedSong_item.querySelector("#removeButton");
+
+        addButton.addEventListener('click', function() {
+
+            if (document.querySelector('.playlistSelected') != null) {
+                let confirmation = confirm('Estas segur de que vols afegir la canço de la playlist selecionada?');
+                if (confirmation) {
+                    deletePlaylistSong(song.track.uri, playListId);
+                }
+            } else {
+                prompt("Has de seleccionar una playlist!");
+            }
+
+        });
+
+        removeButton.addEventListener('click', function() {
+            let confirmation = confirm('Estas segur de que vols eliminar la canço de la playlist?');
+
+            if (confirmation) {
+                deletePlaylistSong(savedSongs[i].uri);
+            }
         });
     }
 
@@ -225,11 +247,11 @@ function displaySongsPlaylist(song, playListId) {
                             <button class="roundButton" id="deletePlaylistSong">-</button>`;
     songsContainer.appendChild(song_item);
 
-    const removeButton = song_item.querySelector("#deletePlaylistSong");
+    let removeButton = song_item.querySelector("#deletePlaylistSong");
 
     removeButton.addEventListener('click', function() {
-        const confirmation = confirm('Estas segur de que vols eliminar la canço de la playli?');
 
+        let confirmation = confirm('Estas segur de que vols eliminar la canço de la playlist?');
         if (confirmation) {
             deletePlaylistSong(song.track.uri, playListId);
         }
