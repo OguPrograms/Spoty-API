@@ -150,7 +150,7 @@ body{
 
                 .newPlayList:focus{
                     border: var(--white) solid 1px;
-                    padding: 10px 19.9px;
+                    padding: 9.5px 19.5px;
                 }
 
                 .button{
@@ -168,7 +168,54 @@ body{
 
         .songs-container{
 
+            position: relative;
             width: 39%;
+            padding: 10px;
+            gap: 10px;
+
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            display: flex;
+            flex-direction: column;
+
+            .songPlaylist {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                background-color: var(--color-gray-light);
+                border-radius: var(--borders);
+
+                color: var(--white);
+
+                padding: 5;
+
+                padding: 10px;
+
+                .infoSong{
+                    width: calc(100% - 40px);
+                    margin-right: 10px;
+                }
+
+                h2{
+                    color: var(--white);
+                    margin: 0px;
+                }
+
+                h3{
+                    color: var(--white-gray);
+                    font-size: 12px;
+                    margin: 0px;
+                }
+
+                h4{
+                    color: var(--white-gray);
+                    font-size: 9px;
+                    margin: 0px;
+                }
+
+            }
 
         }
 

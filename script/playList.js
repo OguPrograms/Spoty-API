@@ -186,9 +186,12 @@ function displaySongsPlaylist(song) {
     const song_item = document.createElement("div");
     song_item.classList.add("songPlaylist");
 
-    song_item.innerHTML = `<h2>${song.track.name}</h2>
-                            <h3>${song.track.artists[0].name}</h3>
-                            <h3>${song.added_at}</h3>`;
+    song_item.innerHTML = ` <div class="infoSong">
+                                <h2>${song.track.name}</h2>
+                                <h3>${song.track.artists[0].name}</h3>
+                                <h4>${song.added_at}</h4>
+                            </div>
+                            <button class="roundButton" id="deletePlaylistSong">-</button>`;
     songsContainer.appendChild(song_item);
 }
 
