@@ -1,4 +1,5 @@
-const listContainer = document.getElementById("playlist");
+const listContainer = document.getElementById("playlists");
+const songsContainer = document.getElementById("songs-container");
 const selectedContainer = document.getElementById("selected-container");
 
 let token = "";
@@ -9,11 +10,6 @@ let token = "";
 backButton.addEventListener('click', function() {
     window.location.href = '/';
 });
-
-// Playlist
-backButton.addEventListener('click', function() {
-    window.location.href = '/';
-}); 
 
 
 /**** GETS ****/
@@ -66,10 +62,10 @@ async function getPlaylists() {
         const data = await response.json();
 
         if (data.items && data.items.length > 0) {
-            console.log("Playlists del usuario:");
+            // console.log("Playlists del usuario:");
             data.items.forEach(playlist => {
-                console.log(`- ${playlist.name} (ID: ${playlist.id})`);
-                displayPlaylist(playlist.name);
+                // console.log(`- ${playlist.name} (ID: ${playlist.id})`);
+                displayPlaylist(playlist);
             });
         } else {
             console.log("El usuario no tiene playlists.");
@@ -110,7 +106,7 @@ async function getSavedTrack(trackIds) {
 };
 
 async function getTrcksPlaylist(playListId) {
-    const url = `https://api.spotify.com/v1/playlists/${selectedPlayList}/tracks`;
+    const url = `https://api.spotify.com/v1/playlists/${playListId}/tracks`;
 
     try {
 
@@ -127,18 +123,18 @@ async function getTrcksPlaylist(playListId) {
 
         const data = await response.json();
 
-        if (data.items && data.items.length > 0) {
-            console.log("Playlists del usuario:");
-            data.items.forEach(playlist => {
-                console.log(`- ${playlist.name} (ID: ${playlist.id})`);
-                displayPlaylist(playlist.name);
+        if (data) {
+            songsContainer.innerHTML = "<h1>Cançons</h1>";
+            data.items.forEach(song => {
+                console.log(song);
+                displaySongsPlaylist(song);
             });
         } else {
-            console.log("El usuario no tiene playlists.");
+            console.log("El usuario no tienecançons en aquesta playlist.");
         }
 
     } catch (error) {
-        console.error("Error al obtener las playlists:", error);
+        console.error("Error al obtener les cançons de la playlist:", error);
     }
 };
 
@@ -156,12 +152,15 @@ function start() {
 }
 
 function displayPlaylist(playlist) {
-    const playlist_item = document.createElement("h2");
+    const playlist_item = document.createElement("div");
+    playlist_item.classList.add("playlist");
 
-
-    playlist_item.innerHTML = `${playlist}`;
+    playlist_item.innerHTML = `<h2>${playlist.name}</h2>`;
     listContainer.appendChild(playlist_item);
 
+    playlist_item.addEventListener('click', function() {
+        getTrcksPlaylist(playlist.id);
+    });
 };
 
 function displaySavedSongs(savedSongs) {
@@ -180,6 +179,17 @@ function displaySavedSongs(savedSongs) {
         selectedContainer.appendChild(savedSong_item);
     }
 
+}
+
+function displaySongsPlaylist(song) {
+    // console.log(song);
+    const song_item = document.createElement("div");
+    song_item.classList.add("songPlaylist");
+
+    song_item.innerHTML = `<h2>${song.track.name}</h2>
+                            <h3>${song.track.artists[0].name}</h3>
+                            <h3>${song.added_at}</h3>`;
+    songsContainer.appendChild(song_item);
 }
 
 start();
