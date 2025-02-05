@@ -126,8 +126,7 @@ async function getTrcksPlaylist(playListId) {
         if (data) {
             songsContainer.innerHTML = "<h1>Cançons</h1>";
             data.items.forEach(song => {
-                console.log(song);
-                displaySongsPlaylist(song);
+                displaySongsPlaylist(song, playListId);
             });
         } else {
             console.log("El usuario no tienecançons en aquesta playlist.");
@@ -137,6 +136,35 @@ async function getTrcksPlaylist(playListId) {
         console.error("Error al obtener les cançons de la playlist:", error);
     }
 };
+
+async function deletePlaylistSong(songURI, playListId) {
+    const url = `https://api.spotify.com/v1/playlists/${playListId}/tracks`;
+
+    try {
+
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                tracks: [{ uri: songURI }]
+            })
+        }); 
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        getTrcksPlaylist(playListId);
+
+    } catch (error) {
+        console.error("Error en borrar la cançó de la playlist:", error);
+    }
+
+}
 
 
 /**** FUNCTIONS ****/
@@ -177,12 +205,15 @@ function displaySavedSongs(savedSongs) {
                                         <button class="roundButton" id="removeButton">-</button>
                                     </div>`;
         selectedContainer.appendChild(savedSong_item);
+
+        savedSong_item.addEventListener('click', function() {
+            getTrcksPlaylist(playlist.id);
+        });
     }
 
 }
 
-function displaySongsPlaylist(song) {
-    // console.log(song);
+function displaySongsPlaylist(song, playListId) {
     const song_item = document.createElement("div");
     song_item.classList.add("songPlaylist");
 
@@ -193,6 +224,18 @@ function displaySongsPlaylist(song) {
                             </div>
                             <button class="roundButton" id="deletePlaylistSong">-</button>`;
     songsContainer.appendChild(song_item);
+
+    const removeButton = song_item.querySelector("#deletePlaylistSong");
+
+    removeButton.addEventListener('click', function() {
+        const confirmation = confirm('Estas segur de que vols eliminar la canço de la playli?');
+
+        if (confirmation) {
+            deletePlaylistSong(song.track.uri, playListId);
+        }
+
+    });
+
 }
 
 start();
