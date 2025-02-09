@@ -3,6 +3,7 @@ const songsContainer = document.getElementById("songs-container");
 const selectedContainer = document.getElementById("selected-container");
 
 let token = "";
+let playlistSelected = "";
 
 /**** LISTENERS ****/
 
@@ -137,6 +138,7 @@ async function getTrcksPlaylist(playListId) {
     }
 };
 
+/**** DELETES ****/
 async function deletePlaylistSong(songURI, playListId) {
     const url = `https://api.spotify.com/v1/playlists/${playListId}/tracks`;
 
@@ -156,12 +158,56 @@ async function deletePlaylistSong(songURI, playListId) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
-
         getTrcksPlaylist(playListId);
 
     } catch (error) {
         console.error("Error en borrar la cançó de la playlist:", error);
+    }
+
+}
+
+function deleteSavedSong(savedSongId) {
+    const savedSongs = JSON.parse(localStorage.getItem("savedSongs")) || [];
+    let newSavedSongs = [];
+
+    savedSongs.forEach(songId => {
+        if (songId !== savedSongId) {
+            newSavedSongs.push(songId);
+        }
+    });
+
+    localStorage.setItem("savedSongs", JSON.stringify(newSavedSongs));
+    document.getElementById("selected-container").innerHTML = "<h1>Cançons seleccionades</h1>";
+    getSavedTrack(newSavedSongs);
+}
+
+
+/**** POSTS ****/
+async function postPlaylistSong(songURI, savedSongId) {
+    const url = `https://api.spotify.com/v1/playlists/${playlistSelected}/tracks`;
+
+    try {
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                uris: [songURI],
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        } else {
+            getTrcksPlaylist(playlistSelected);
+            deleteSavedSong(savedSongId);
+            alert("La cançó s'ha afegit correctament a la playlist");
+        }
+
+    } catch (error) {
+        console.error("Error en afegir la cançó a la playlist:", error);
     }
 
 }
@@ -189,6 +235,7 @@ function displayPlaylist(playlist) {
     playlist_item.addEventListener('click', function() {
         document.querySelectorAll('.playlistSelected').forEach(item => item.classList.remove('playlistSelected'));
         playlist_item.classList.add('playlistSelected');
+        playlistSelected = playlist.id;
         getTrcksPlaylist(playlist.id);
     });
 };
@@ -216,19 +263,19 @@ function displaySavedSongs(savedSongs) {
             if (document.querySelector('.playlistSelected') != null) {
                 let confirmation = confirm('Estas segur de que vols afegir la canço de la playlist selecionada?');
                 if (confirmation) {
-                    deletePlaylistSong(song.track.uri, playListId);
+                    postPlaylistSong(savedSongs[i].uri, savedSongs[i].id);
                 }
             } else {
-                prompt("Has de seleccionar una playlist!");
+                alert("Has de seleccionar una playlist!");
             }
 
         });
 
         removeButton.addEventListener('click', function() {
-            let confirmation = confirm('Estas segur de que vols eliminar la canço de la playlist?');
+            let confirmation = confirm('Estas segur de que vols eliminar la canço de les cançons seleccionades?');
 
             if (confirmation) {
-                deletePlaylistSong(savedSongs[i].uri);
+                deleteSavedSong(savedSongs[i].id);
             }
         });
     }
