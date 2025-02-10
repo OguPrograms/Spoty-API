@@ -139,7 +139,7 @@ body{
 
                     cursor: all;
                     all: unset;
-                    width: calc(100% - 155px);
+                    width: calc(100% - 173px);
 
                     border-radius: 200px;
                     background-color: var(--color-gray-light);

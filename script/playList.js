@@ -221,7 +221,10 @@ function start() {
     getToken();
 
     getPlaylists();
-    getSavedTrack(savedSongsId);
+
+    if (savedSongsId.length != 0) {
+        getSavedTrack(savedSongsId);
+    }
 
 }
 
@@ -236,6 +239,7 @@ function displayPlaylist(playlist) {
         document.querySelectorAll('.playlistSelected').forEach(item => item.classList.remove('playlistSelected'));
         playlist_item.classList.add('playlistSelected');
         playlistSelected = playlist.id;
+        document.getElementById("newPlayList").value = playlist.name;
         getTrcksPlaylist(playlist.id);
     });
 };
